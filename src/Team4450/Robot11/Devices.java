@@ -35,6 +35,7 @@ public class Devices
 	  public final static Compressor	compressor = new Compressor(0);	// Compressor class represents the PCM. There are 2.
 	  
 	  public final static AnalogInput	pressureSensor = new AnalogInput(0);
+	  public final static AnalogInput	absEncoder = new AnalogInput(1);
 	  
 	  public final static PowerDistributionPanel	PDP = new PowerDistributionPanel();
 

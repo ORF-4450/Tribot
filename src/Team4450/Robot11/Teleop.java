@@ -126,6 +126,7 @@ class Teleop
 			LCD.printLine(4, "leftY=%.4f  rightY=%.4f  utilX=%.4f", leftY, rightY, utilX);
 			LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
 					Devices.navx.getYawRate(), Devices.navx.getHeading());
+			LCD.printLine(7, "absEncoder=%.2f", Devices.absEncoder.getVoltage());
 			LCD.printLine(8, "pressureV=%.2f  psi=%d", robot.monitorCompressorThread.getVoltate(), robot.monitorCompressorThread.getPressure());
 
 			// Set wheel motors.
