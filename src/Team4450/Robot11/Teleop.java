@@ -118,8 +118,8 @@ class Teleop
 			LCD.printLine(4, "rightX=%.4f  rightY=%.4f  utilX=%.4f", rightX, rightY, utilX);
 			LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
 					Devices.navx.getYawRate(), Devices.navx.getHeading());
-			LCD.printLine(7, "encoder1=%.2f  encoder2=%.2f  encoder3=%.2f", Devices.encoder1.getVoltage(), Devices.encoder1.getVoltage(), Devices.encoder1.getVoltage());
-			LCD.printLine(8, "pressureV=%.2f  psi=%d", robot.monitorCompressorThread.getVoltate(), robot.monitorCompressorThread.getPressure());
+			LCD.printLine(7, "encoder1=%d  encoder2=%d  encoder3=%d", Devices.encoder1.getAngle(), Devices.encoder2.getAngle(), Devices.encoder3.getAngle());
+			LCD.printLine(8, "pressureV=%.2f  psi=%d", robot.monitorCompressorThread.getVoltage(), robot.monitorCompressorThread.getPressure());
 
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
