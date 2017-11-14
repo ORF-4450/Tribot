@@ -22,10 +22,11 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class Devices
 {
-	  // Motor CAN ID/PWM port assignments (1=left-front, 2=left-rear, 3=right-front, 4=right-rear)
-	  private static CANTalon	LFCanTalon, LRCanTalon, RFCanTalon, RRCanTalon, LSlaveCanTalon, RSlaveCanTalon;
+	  // Motor CAN ID/PWM port assignments.
+	  private static CANTalon	canTalon1, canTalon2, canTalon3;
+	  private static CANTalon	canTalon4, canTalon5, canTalon6;
 	  
-	  public static RobotDrive	robotDrive;
+	  public static TribotDrive	robotDrive;
 
 	  public final static Joystick      utilityStick = new Joystick(2);	
 	  public final static Joystick      leftStick = new Joystick(0);	
@@ -35,8 +36,11 @@ public class Devices
 	  public final static Compressor	compressor = new Compressor(0);	// Compressor class represents the PCM. There are 2.
 	  
 	  public final static AnalogInput	pressureSensor = new AnalogInput(0);
-	  public final static AnalogInput	absEncoder = new AnalogInput(1);
 	  
+	  public final static AbsoluteEncoder	encoder1 = new AbsoluteEncoder(new AnalogInput(1), 0);
+	  public final static AbsoluteEncoder	encoder2 = new AbsoluteEncoder(new AnalogInput(2), 0);
+	  public final static AbsoluteEncoder	encoder3 = new AbsoluteEncoder(new AnalogInput(3), 0);
+
 	  public final static PowerDistributionPanel	PDP = new PowerDistributionPanel();
 
 	  public final static DriverStation				ds = DriverStation.getInstance();
@@ -49,33 +53,26 @@ public class Devices
 	  {
 		  Util.consoleLog();
 
-		  LFCanTalon = new CANTalon(1);
-		  LRCanTalon = new CANTalon(2);
-		  RFCanTalon = new CANTalon(3);
-		  RRCanTalon = new CANTalon(4);
-		  LSlaveCanTalon = new CANTalon(5);
-		  RSlaveCanTalon = new CANTalon(6);
-		  
-		  robotDrive = new RobotDrive(LFCanTalon, LRCanTalon, RFCanTalon, RRCanTalon);
+		  canTalon1 = new CANTalon(1);
+		  canTalon2 = new CANTalon(2);
+		  canTalon3 = new CANTalon(3);
+		  canTalon4 = new CANTalon(4);
+		  canTalon5 = new CANTalon(5);
+		  canTalon6 = new CANTalon(6);
+
+		  robotDrive = new TribotDrive( canTalon1, canTalon2, canTalon3,
+				  						canTalon4, canTalon5, canTalon6,
+				  						encoder1, encoder2, encoder3);
 
 	      // Initialize CAN Talons and write status to log so we can verify
 	      // all the talons are connected.
-	      InitializeCANTalon(LFCanTalon);
-	      InitializeCANTalon(LRCanTalon);
-	      InitializeCANTalon(RFCanTalon);
-	      InitializeCANTalon(RRCanTalon);
-	      InitializeCANTalon(LSlaveCanTalon);
-	      InitializeCANTalon(RSlaveCanTalon);
-	      
-	      // Configure slave CAN Talons to follow the front L & R Talons.
-	      LSlaveCanTalon.changeControlMode(TalonControlMode.Follower);
-	      LSlaveCanTalon.set(LFCanTalon.getDeviceID());
-	      LSlaveCanTalon.reverseOutput(true);
-
-	      RSlaveCanTalon.changeControlMode(TalonControlMode.Follower);
-	      RSlaveCanTalon.set(RFCanTalon.getDeviceID());
-	      RSlaveCanTalon.reverseOutput(true);
-	      
+	      InitializeCANTalon(canTalon1);
+	      InitializeCANTalon(canTalon2);
+	      InitializeCANTalon(canTalon3);
+	      InitializeCANTalon(canTalon4);
+	      InitializeCANTalon(canTalon5);
+	      InitializeCANTalon(canTalon6);
+      
 	      // Turn on brake mode for CAN Talons.
 	      SetCANTalonBrakeMode(true);
 	  }
@@ -98,12 +95,12 @@ public class Devices
 	  {
 		  Util.consoleLog("brakes on=%b", brakeMode);
 		  
-		  LFCanTalon.enableBrakeMode(brakeMode);
-		  LRCanTalon.enableBrakeMode(brakeMode);
-		  RFCanTalon.enableBrakeMode(brakeMode);
-		  RRCanTalon.enableBrakeMode(brakeMode);
-		  LSlaveCanTalon.enableBrakeMode(brakeMode);
-		  RSlaveCanTalon.enableBrakeMode(brakeMode);
+		  canTalon1.enableBrakeMode(brakeMode);
+		  canTalon2.enableBrakeMode(brakeMode);
+		  canTalon3.enableBrakeMode(brakeMode);
+		  canTalon4.enableBrakeMode(brakeMode);
+		  canTalon5.enableBrakeMode(brakeMode);
+		  canTalon6.enableBrakeMode(brakeMode);
 	  }
 	  
 	  // Set CAN Talon voltage ramp rate. Rate is volts/sec and can be 2-12v.
@@ -112,12 +109,12 @@ public class Devices
 	  {
 		  Util.consoleLog("%f", rate);
 		  
-		  LFCanTalon.setVoltageRampRate(rate);
-		  LRCanTalon.setVoltageRampRate(rate);
-		  RFCanTalon.setVoltageRampRate(rate);
-		  RRCanTalon.setVoltageRampRate(rate);
-		  LSlaveCanTalon.setVoltageRampRate(rate);
-		  RSlaveCanTalon.setVoltageRampRate(rate);
+		  canTalon1.setVoltageRampRate(rate);
+		  canTalon2.setVoltageRampRate(rate);
+		  canTalon3.setVoltageRampRate(rate);
+		  canTalon4.setVoltageRampRate(rate);
+		  canTalon5.setVoltageRampRate(rate);
+		  canTalon6.setVoltageRampRate(rate);
 	  }
 	  
 	  // Return voltage and current draw for each CAN Talon.
@@ -125,12 +122,11 @@ public class Devices
 	  public static String GetCANTalonStatus()
 	  {
 		  return String.format("%.1f/%.1f  %.1f/%.1f  %.1f/%.1f  %.1f/%.1f  %.1f/%.1f  %.1f/%.1f", 
-				  LFCanTalon.getOutputVoltage(), LFCanTalon.getOutputCurrent(),
-				  LRCanTalon.getOutputVoltage(), LRCanTalon.getOutputCurrent(),
-				  RFCanTalon.getOutputVoltage(), RFCanTalon.getOutputCurrent(),
-				  RRCanTalon.getOutputVoltage(), RRCanTalon.getOutputCurrent(),
-				  LSlaveCanTalon.getOutputVoltage(), LSlaveCanTalon.getOutputCurrent(),
-				  RSlaveCanTalon.getOutputVoltage(), RSlaveCanTalon.getOutputCurrent());
+				  canTalon1.getOutputVoltage(), canTalon1.getOutputCurrent(),
+				  canTalon2.getOutputVoltage(), canTalon2.getOutputCurrent(),
+				  canTalon3.getOutputVoltage(), canTalon3.getOutputCurrent(),
+				  canTalon4.getOutputVoltage(), canTalon4.getOutputCurrent(),
+				  canTalon5.getOutputVoltage(), canTalon5.getOutputCurrent(),
+				  canTalon6.getOutputVoltage(), canTalon6.getOutputCurrent());
 	  }
-
 }

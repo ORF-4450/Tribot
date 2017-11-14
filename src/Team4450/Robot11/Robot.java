@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot 
 {
-  static final String  	PROGRAM_NAME = "RAC11-10.09.17-01";
+  static final String  	PROGRAM_NAME = "RAC11T-11.08.17-01";
 
   public Properties		robotProperties;
   
@@ -105,11 +105,11 @@ public class Robot extends SampleRobot
         // Reverse motors so they all turn on the right direction to match "forward"
         // as we define it for the robot.
 
-   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-    
-   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+//   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+//   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+//    
+//   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+//   		Devices.robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
      
    		// Create NavX object here so it has time to calibrate before we
    		// use it. Takes 10 seconds. Must appear before CamerFeed is created.

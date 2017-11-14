@@ -14,7 +14,7 @@ class Teleop
 	private final Robot 		robot;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
-	private boolean				autoTarget, invertDrive, altDriveMode;
+	private boolean				autoTarget, altDriveMode;
 	private Vision				vision;
 
 	// Constructor.
@@ -42,13 +42,11 @@ class Teleop
 
 	void OperatorControl()
 	{
-		double	rightY = 0, leftY = 0, utilX = 0, rightX = 0, leftX = 0;
-		double	gain = .01;
-		boolean	steeringAssistMode = false;
-		int		angle;
-
+		double	rightY = 0, rightX = 0, leftY = 0, utilX = 0;
+		
 		// Motor safety turned off during initialization.
 		Devices.robotDrive.setSafetyEnabled(false);
+
 
 		Util.consoleLog();
 
@@ -97,10 +95,7 @@ class Teleop
 		if (robot.isComp) Devices.SetCANTalonBrakeMode(lpControl.latchedState);
 
 		// Set gyro/Navx to heading 0.
-		//robot.gyro.reset();
 		Devices.navx.resetYaw();
-
-		Devices.navx.setHeading(90);
 
 		// Reset encoder.
 		//Devices.encoder.reset();
@@ -116,68 +111,20 @@ class Teleop
 			// using calls to our JoyStick class.
 
 			rightY = stickLogCorrection(rightStick.GetY());	// fwd/back
-			leftY = stickLogCorrection(leftStick.GetY());	// fwd/back
-
 			rightX = stickLogCorrection(rightStick.GetX());	// left/right
-			leftX = stickLogCorrection(leftStick.GetX());	// left/right
 
 			utilX = utilityStick.GetX();
 
-			LCD.printLine(4, "leftY=%.4f  rightY=%.4f  utilX=%.4f", leftY, rightY, utilX);
+			LCD.printLine(4, "rightX=%.4f  rightY=%.4f  utilX=%.4f", rightX, rightY, utilX);
 			LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
 					Devices.navx.getYawRate(), Devices.navx.getHeading());
-			LCD.printLine(7, "absEncoder=%.2f", Devices.absEncoder.getVoltage());
+			LCD.printLine(7, "encoder1=%.2f  encoder2=%.2f  encoder3=%.2f", Devices.encoder1.getVoltage(), Devices.encoder1.getVoltage(), Devices.encoder1.getVoltage());
 			LCD.printLine(8, "pressureV=%.2f  psi=%d", robot.monitorCompressorThread.getVoltate(), robot.monitorCompressorThread.getPressure());
 
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
 
-			//if (!autoTarget) robot.robotDrive.tankDrive(leftY, rightY);
-
-			// Two drive modes, full tank and alternate. Switch on right stick trigger.
-
-			if (!autoTarget) 
-			{
-				if (altDriveMode)
-				{	// normal tank with straight drive assist when sticks within 10% of each other.
-					if (leftRightEqual(leftY, rightY, 10) && Math.abs(rightY) > .50)
-					{
-						if (!steeringAssistMode) Devices.navx.resetYaw();
-
-						// Angle is negative if robot veering left, positive if veering right when going forward.
-						// It is opposite when going backward. Note that for this robot, - power means forward and
-						// + power means backward.
-
-						angle = (int) Devices.navx.getYaw();
-
-						LCD.printLine(5, "angle=%d", angle);
-
-						// Invert angle for backwards.
-
-						if (rightY > 0) angle = -angle;
-
-						//Util.consoleLog("angle=%d", angle);
-
-						// Note we invert sign on the angle because we want the robot to turn in the opposite
-						// direction than it is currently going to correct it. So a + angle says robot is veering
-						// right so we set the turn value to - because - is a turn left which corrects our right
-						// drift.
-
-						Devices.robotDrive.drive(rightY, -angle * gain);
-
-						steeringAssistMode = true;
-					}
-					else
-					{
-						steeringAssistMode = false;
-						Devices.robotDrive.tankDrive(leftY, rightY);		// Normal tank drive.
-					}
-
-					SmartDashboard.putBoolean("Overload", steeringAssistMode);
-				}
-				else
-					Devices.robotDrive.tankDrive(leftY, rightY);		// Normal tank drive.
-			}
+			if (!autoTarget) Devices.robotDrive.singleSteer(rightY, rightX);
 
 			// Update the robot heading indicator on the DS.
 
@@ -193,17 +140,8 @@ class Teleop
 		Util.consoleLog("end");
 	}
 
-	private boolean leftRightEqual(double left, double right, double percent)
-	{
-		//if (left == right) return true;
-
-		if (Math.abs(left - right) <= (1 * (percent / 100))) return true;
-
-		return false;
-	}
-
-	// Custom base logrithim.
-	// Returns logrithim base of the value.
+	// Custom base logarithm.
+	// Returns logarithm base of the value.
 
 	private double baseLog(double base, double value)
 	{
@@ -211,7 +149,7 @@ class Teleop
 	}
 
 	// Map joystick y value of 0.0 to 1.0 to the motor working power range of approx 0.5 to 1.0 using
-	// logrithmic curve.
+	// Logarithmic curve.
 
 	private double stickLogCorrection(double joystickValue)
 	{
@@ -224,8 +162,6 @@ class Teleop
 
 		return joystickValue;
 	}
-
-	
 
 	// Handle LaunchPad control events.
 
@@ -288,8 +224,6 @@ class Teleop
 
 		public void ButtonDown(JoyStickEvent joyStickEvent) 
 		{
-			int angle;
-
 			JoyStickButton	button = joyStickEvent.button;
 
 			Util.consoleLog("%s, latchedState=%b", button.id.name(),  button.latchedState);
