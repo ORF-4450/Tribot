@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 /**
- * Provides a wrapper for the Absolute Encoder model . That encoder is attached
+ * Provides a wrapper for the Absolute Encoder model MA3-A10-250N. That encoder is attached
  * as an AnalogInput device and reads 0-5v for 0-360 degrees. Implements PIDSource
  * interface so it can be a data source to the PID controller class.
  */
@@ -101,7 +101,7 @@ public class AbsoluteEncoder implements PIDSource
 		return encoder.getVoltage();
 	}
 	
-	private double getRate()
+	public double getRate()
 	{
 		// TODO: Implement a rate of change function.
 		
