@@ -32,11 +32,15 @@ public class TribotDrive
 		this.encoder2 = encoder2;
 		this.encoder3 = encoder3;
 		
-		rotatePID1 = new PIDController(0.0, 0.0, 0.0, this.encoder1, this.rotateMotor1);
+		this.encoder1.setPidOffsetMode(true);
+		this.encoder2.setPidOffsetMode(true);
+		this.encoder3.setPidOffsetMode(true);
+
+		rotatePID1 = new PIDController(0.025, 0.001, 0.001, this.encoder1, this.rotateMotor1);
 		configureRotationPID(rotatePID1);
-		rotatePID2 = new PIDController(0.0, 0.0, 0.0, this.encoder2, this.rotateMotor2);
+		rotatePID2 = new PIDController(0.025, 0.001, 0.001, this.encoder2, this.rotateMotor2);
 		configureRotationPID(rotatePID2);
-		rotatePID3 = new PIDController(0.0, 0.0, 0.0, this.encoder3, this.rotateMotor3);
+		rotatePID3 = new PIDController(0.025, 0.001, 0.001, this.encoder3, this.rotateMotor3);
 		configureRotationPID(rotatePID3);
 	}
 
@@ -63,7 +67,7 @@ public class TribotDrive
 	{
 		pid.setAbsoluteTolerance(1);	// degrees.
 		pid.setOutputRange(-1.0, 1.0);
-		pid.enable();
+		//pid.enable();
 	}
 	
 	/**
@@ -74,6 +78,10 @@ public class TribotDrive
 	{
 		Util.consoleLog();
 
+		//rotatePID1.setSetpoint(1);
+		//rotatePID2.setSetpoint(1);
+		//rotatePID3.setSetpoint(1);
+		
 		pointMotor(rotatePID1, 0);
 		pointMotor(rotatePID2, 0);
 		pointMotor(rotatePID3, 0);
@@ -83,33 +91,59 @@ public class TribotDrive
 	 * Turn motor assembly to encoder position. PID controller does the work
 	 * on it's own thread reading encoder and setting motor power to turn to the
 	 * target angle.
-	 * @param position Desired rotational angle of motor 0-360.
+	 * @param angle Desired rotational angle of motor from encoder zero point. Depending
+	 * on encoder mode, this is 0-360 or -180 to +180.
 	 */
 	private void pointMotor(PIDController pid, int angle)
 	{
-		Util.consoleLog("pos=%d", angle);
+		//Util.consoleLog("angle=%d", angle);
 		
-		pid.setSetpoint(angle);
+		//if (pid.getSetpoint() != angle)
+		//{
+			//pid.disable();
+			pid.setSetpoint(angle);
+			pid.enable();
+		//}
 	}
 
 	/**
-	 * Drive robot with specified power and angle value.
+	 * Drive robot with wheel #1 only with specified power and angle value.
 	 * @param power Motor power -1 to +1.
 	 * @param angle Steering angle -1 to +1 which is normalized to -90 to +90.
 	 */
 	void singleSteer(double power, double angle)
 	{
-		// to steer, we have to convert the joystick input to the range -90  to +90
-		// and then add that to the zero angle. So zero input angle = the motor zero
-		// angle, meaning no joystick deflection motor points straight ahead.
+		//Util.consoleLog("angle=%f", angle);
+
+		angle = angle * 90;
 		
-		pointMotor(rotatePID1, (int) (angle * 90));
+		pointMotor(rotatePID1, (int) angle);
 		
 		driveMotor1.set(power);
 		driveMotor2.set(power);
 		driveMotor3.set(power);
 	}
-	
+
+	/**
+	 * Drive robot with all wheels with specified power and angle value.
+	 * @param power Motor power -1 to +1.
+	 * @param angle Steering angle -1 to +1 which is normalized to -90 to +90.
+	 */
+	void allSteer(double power, double angle)
+	{
+		//Util.consoleLog("angle=%f", angle);
+
+		angle = angle * 90;
+		
+		pointMotor(rotatePID1, (int) angle);
+		pointMotor(rotatePID2, (int) angle);
+		pointMotor(rotatePID3, (int) angle);
+
+		driveMotor1.set(power);
+		driveMotor2.set(power);
+		driveMotor3.set(power);
+	}
+
 	/**
 	 * Enable/disable motor safety.
 	 * @param enabled True to enable motor safety protection.

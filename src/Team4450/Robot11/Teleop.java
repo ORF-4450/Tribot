@@ -47,7 +47,6 @@ class Teleop
 		// Motor safety turned off during initialization.
 		Devices.robotDrive.setSafetyEnabled(false);
 
-
 		Util.consoleLog();
 
 		LCD.printLine(1, "Mode: OperatorControl");
@@ -86,22 +85,23 @@ class Teleop
 		utilityStick.addJoyStickEventListener(new UtilityStickListener());
 		utilityStick.Start();
 
-		// Tighten up dead zone for smoother climber movement.
-		utilityStick.deadZone = .05;
+		// Remove dead zone for smoother steering movement.
+		rightStick.deadZone = 0.03;
+		leftStick.deadZone = 0.03;
 
 		// Set CAN Talon brake mode by rocker switch setting.
 		// We do this here so that the Utility stick thread has time to read the initial state
 		// of the rocker switch.
-		if (robot.isComp) Devices.SetCANTalonBrakeMode(lpControl.latchedState);
+		//if (robot.isComp) Devices.SetCANTalonBrakeMode(lpControl.latchedState);
 
 		// Set gyro/Navx to heading 0.
-		Devices.navx.resetYaw();
+		//Devices.navx.resetYaw();
 
 		// Reset encoder.
 		//Devices.encoder.reset();
 
 		// Motor safety turned on.
-		Devices.robotDrive.setSafetyEnabled(true);
+		Devices.robotDrive.setSafetyEnabled(false);
 
 		// Driving loop runs until teleop is over.
 
@@ -111,24 +111,26 @@ class Teleop
 			// using calls to our JoyStick class.
 
 			rightY = stickLogCorrection(rightStick.GetY());	// fwd/back
-			rightX = stickLogCorrection(rightStick.GetX());	// left/right
+			rightX = rightStick.GetX();	// left/right
 
 			utilX = utilityStick.GetX();
 
 			LCD.printLine(4, "rightX=%.4f  rightY=%.4f  utilX=%.4f", rightX, rightY, utilX);
-			LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
-					Devices.navx.getYawRate(), Devices.navx.getHeading());
+			//LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
+			//		Devices.navx.getYawRate(), Devices.navx.getHeading());
+			LCD.printLine(6, "encoderR1=%d  encoderR2=%d  encoderR3=%d", Devices.encoder1.getRawAngle(), Devices.encoder2.getRawAngle(), Devices.encoder3.getRawAngle());
 			LCD.printLine(7, "encoder1=%d  encoder2=%d  encoder3=%d", Devices.encoder1.getAngle(), Devices.encoder2.getAngle(), Devices.encoder3.getAngle());
-			LCD.printLine(8, "pressureV=%.2f  psi=%d", robot.monitorCompressorThread.getVoltage(), robot.monitorCompressorThread.getPressure());
+			LCD.printLine(8, "encoder1O=%d  encoder2O=%d  encoder3O=%d", Devices.encoder1.getOffsetFromZero(), Devices.encoder2.getOffsetFromZero(), Devices.encoder3.getOffsetFromZero());
+			//LCD.printLine(8, "pressureV=%.2f  psi=%d", robot.monitorCompressorThread.getVoltage(), robot.monitorCompressorThread.getPressure());
 
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
 
-			if (!autoTarget) Devices.robotDrive.singleSteer(rightY, rightX);
+			//if (!autoTarget) Devices.robotDrive.allSteer(rightY * .50, rightX);
 
 			// Update the robot heading indicator on the DS.
 
-			SmartDashboard.putNumber("Gyro", Devices.navx.getHeading());
+			//SmartDashboard.putNumber("Gyro", Devices.navx.getHeading());
 
 			// End of driving loop.
 

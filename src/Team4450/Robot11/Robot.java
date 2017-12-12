@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot 
 {
-  static final String  	PROGRAM_NAME = "RAC11T-11.08.17-01";
+  static final String  	PROGRAM_NAME = "RAC11T-12.11.17-01";
 
   public Properties		robotProperties;
   
@@ -92,7 +92,7 @@ public class Robot extends SampleRobot
    		// Reset PDB & PCM sticky faults.
       
    		Devices.PDP.clearStickyFaults();
-   		Devices.compressor.clearAllPCMStickyFaults();
+   		//Devices.compressor.clearAllPCMStickyFaults();
    		
    		// Configure motor controllers and RobotDrive.
    		
@@ -101,6 +101,8 @@ public class Robot extends SampleRobot
    		Devices.robotDrive.stopMotor();
    		Devices.robotDrive.setSafetyEnabled(false);
    		Devices.robotDrive.setExpiration(0.1);
+   		
+   		//Devices.robotDrive.alignToZero();
         
         // Reverse motors so they all turn on the right direction to match "forward"
         // as we define it for the robot.
@@ -114,27 +116,27 @@ public class Robot extends SampleRobot
    		// Create NavX object here so it has time to calibrate before we
    		// use it. Takes 10 seconds. Must appear before CamerFeed is created.
    		
-   		Devices.navx = NavX.getInstance(NavX.PortType.SPI);
+   		//Devices.navx = NavX.getInstance(NavX.PortType.SPI);
    		
-   		Devices.navx.dumpValuesToNetworkTables();
+   		//Devices.navx.dumpValuesToNetworkTables();
 
    		// Start the battery, compressor, PDP and camera feed monitoring Tasks.
 
    		monitorBatteryThread = MonitorBattery.getInstance(Devices.ds);
    		monitorBatteryThread.start();
 
-   		monitorCompressorThread = MonitorCompressor.getInstance(Devices.pressureSensor);
-   		monitorCompressorThread.setDelay(1.0);
-   		monitorCompressorThread.SetLowPressureAlarm(50);
-   		monitorCompressorThread.start();
+//   		monitorCompressorThread = MonitorCompressor.getInstance(Devices.pressureSensor);
+//   		monitorCompressorThread.setDelay(1.0);
+//   		monitorCompressorThread.SetLowPressureAlarm(50);
+//   		monitorCompressorThread.start();
    		
    		//monitorPDPThread = MonitorPDP.getInstance(ds, PDP);
    		//monitorPDPThread.start();
 
    		// Start camera server using our class for usb cameras.
       
-       	cameraThread = CameraFeed.getInstance(); 
-       	cameraThread.start();
+       	//cameraThread = CameraFeed.getInstance(); 
+       	//cameraThread.start();
    		
    		Util.consoleLog("end");
     }
@@ -188,11 +190,11 @@ public class Robot extends SampleRobot
     	  location = Devices.ds.getLocation();
 
     	  // This code turns off the automatic compressor management if requested by DS.
-    	  Devices.compressor.setClosedLoopControl(SmartDashboard.getBoolean("CompressorEnabled", true));
+    	  //Devices.compressor.setClosedLoopControl(SmartDashboard.getBoolean("CompressorEnabled", true));
 
     	  // Reset persistent fault flags in control system modules.
     	  Devices.PDP.clearStickyFaults();
-    	  Devices.compressor.clearAllPCMStickyFaults();
+    	  //Devices.compressor.clearAllPCMStickyFaults();
              
     	  // Start autonomous process contained in the Autonomous class.
         
@@ -229,10 +231,10 @@ public class Robot extends SampleRobot
 
     	  // Reset persistent fault flags in control system modules.
           Devices.PDP.clearStickyFaults();
-          Devices.compressor.clearAllPCMStickyFaults();
+          //Devices.compressor.clearAllPCMStickyFaults();
 
           // This code turns off the automatic compressor management if requested by DS.
-          Devices.compressor.setClosedLoopControl(SmartDashboard.getBoolean("CompressorEnabled", true));
+          //Devices.compressor.setClosedLoopControl(SmartDashboard.getBoolean("CompressorEnabled", true));
         
           // Start operator control process contained in the Teleop class.
         
