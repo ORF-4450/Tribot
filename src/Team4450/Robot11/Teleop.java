@@ -14,7 +14,8 @@ class Teleop
 	private final Robot 		robot;
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
-	private boolean				autoTarget, altDriveMode;
+	private boolean				autoTarget, altDriveMode, setEncoderZero, rotateMode;
+;
 	private Vision				vision;
 
 	// Constructor.
@@ -42,7 +43,7 @@ class Teleop
 
 	void OperatorControl()
 	{
-		double	rightY = 0, rightX = 0, leftY = 0, utilX = 0;
+		double	rightY = 0, rightX = 0, leftY = 0, leftX = 0, utilX = 0;
 		
 		// Motor safety turned off during initialization.
 		Devices.robotDrive.setSafetyEnabled(false);
@@ -111,13 +112,14 @@ class Teleop
 			// using calls to our JoyStick class.
 
 			rightY = stickLogCorrection(rightStick.GetY());	// fwd/back
-			rightX = rightStick.GetX();	// left/right
+			leftX = leftStick.GetX();						// left/right
 
 			utilX = utilityStick.GetX();
 
-			LCD.printLine(4, "rightX=%.4f  rightY=%.4f  utilX=%.4f", rightX, rightY, utilX);
+			LCD.printLine(4, "leftX=%.4f  rightY=%.4f  utilX=%.4f", leftX, rightY, utilX);
 			//LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
 			//		Devices.navx.getYawRate(), Devices.navx.getHeading());
+			LCD.printLine(5, "Set encoder zero=%b", setEncoderZero);
 			LCD.printLine(6, "encoderR1=%d  encoderR2=%d  encoderR3=%d", Devices.encoder1.getRawAngle(), Devices.encoder2.getRawAngle(), Devices.encoder3.getRawAngle());
 			LCD.printLine(7, "encoder1=%d  encoder2=%d  encoder3=%d", Devices.encoder1.getAngle(), Devices.encoder2.getAngle(), Devices.encoder3.getAngle());
 			LCD.printLine(8, "encoder1O=%d  encoder2O=%d  encoder3O=%d", Devices.encoder1.getOffsetFromZero(), Devices.encoder2.getOffsetFromZero(), Devices.encoder3.getOffsetFromZero());
@@ -126,7 +128,9 @@ class Teleop
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
 
-			//if (!autoTarget) Devices.robotDrive.allSteer(rightY * .50, rightX);
+			if (!autoTarget && !setEncoderZero && !rotateMode) Devices.robotDrive.allSteer(rightY * .50, leftX);
+
+			if (!autoTarget && !setEncoderZero && rotateMode) Devices.robotDrive.SetRotatePower(leftX);
 
 			// Update the robot heading indicator on the DS.
 
@@ -205,14 +209,24 @@ class Teleop
 			switch(control.id)
 			{
 			// Example of Rocker:
-			/*
-			case ROCKER_NAME_HERE:
+			
+			case ROCKER_LEFT_FRONT:
 				if (control.latchedState)
-					DoOneThing();
+				{
+					setEncoderZero = true;
+					Devices.robotDrive.stopMotors();
+				}
 				else
-					DoOtherThing();
+				{
+					Devices.encoder1.setZeroAngleOffset(Devices.encoder1.getRawAngle());
+					Devices.encoder2.setZeroAngleOffset(Devices.encoder2.getRawAngle());
+					Devices.encoder3.setZeroAngleOffset(Devices.encoder3.getRawAngle());
+
+					setEncoderZero = false;
+				}
+				
 				break;
-			*/
+			
 			default:
 				break;
 			}
@@ -268,7 +282,16 @@ class Teleop
 
 			switch(button.id)
 			{
-			//Example of Joystick Button case:
+				case TOP_BACK:
+					if (button.latchedState)
+						rotateMode = true;
+					else
+						rotateMode = false;
+					
+					Devices.robotDrive.setRotateMode(rotateMode);
+					break;
+				
+				//Example of Joystick Button case:
 			/*
 			case TRIGGER:
 				if (button.latchedState)

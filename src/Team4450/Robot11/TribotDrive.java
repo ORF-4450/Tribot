@@ -11,6 +11,8 @@ public class TribotDrive
 	private final CANTalon			rotateMotor1, rotateMotor2, rotateMotor3;
 	private final AbsoluteEncoder	encoder1, encoder2, encoder3;
 	private final PIDController		rotatePID1, rotatePID2, rotatePID3;
+	//private final PIDOutputShim		rotateMotor2Shim;
+	//private final PIDSourceShim		encoder2Shim;
 
 	// Constructor.
 
@@ -32,15 +34,20 @@ public class TribotDrive
 		this.encoder2 = encoder2;
 		this.encoder3 = encoder3;
 		
-		this.encoder1.setPidOffsetMode(true);
-		this.encoder2.setPidOffsetMode(true);
-		this.encoder3.setPidOffsetMode(true);
+//		this.encoder1.setPidOffsetMode(true);
+//		this.encoder2.setPidOffsetMode(true);
+//		this.encoder3.setPidOffsetMode(true);
 
-		rotatePID1 = new PIDController(0.025, 0.001, 0.001, this.encoder1, this.rotateMotor1);
+		rotatePID1 = new PIDController(0.025, 0.001, 0.00, this.encoder1, this.rotateMotor1);
 		configureRotationPID(rotatePID1);
-		rotatePID2 = new PIDController(0.025, 0.001, 0.001, this.encoder2, this.rotateMotor2);
+		
+		//rotateMotor2Shim = new PIDOutputShim(this.rotateMotor2);
+		//encoder2Shim  = new PIDSourceShim(this.encoder2);
+		
+		rotatePID2 = new PIDController(0.025, 0.001, 0.00, this.encoder2, this.rotateMotor2);
 		configureRotationPID(rotatePID2);
-		rotatePID3 = new PIDController(0.025, 0.001, 0.001, this.encoder3, this.rotateMotor3);
+		
+		rotatePID3 = new PIDController(0.025, 0.001, 0.00, this.encoder3, this.rotateMotor3);
 		configureRotationPID(rotatePID3);
 	}
 
@@ -67,7 +74,7 @@ public class TribotDrive
 	{
 		pid.setAbsoluteTolerance(1);	// degrees.
 		pid.setOutputRange(-1.0, 1.0);
-		//pid.enable();
+		pid.setContinuous(false);
 	}
 	
 	/**
@@ -78,17 +85,17 @@ public class TribotDrive
 	{
 		Util.consoleLog();
 
-		//rotatePID1.setSetpoint(1);
-		//rotatePID2.setSetpoint(1);
-		//rotatePID3.setSetpoint(1);
-		
 		pointMotor(rotatePID1, 0);
 		pointMotor(rotatePID2, 0);
 		pointMotor(rotatePID3, 0);
+		
+		this.encoder1.setPidOffsetMode(true);
+		this.encoder2.setPidOffsetMode(true);
+		this.encoder3.setPidOffsetMode(true);
 	}
 	
 	/**
-	 * Turn motor assembly to encoder position. PID controller does the work
+	 * Turn motor assembly to desired angle. PID controller does the work
 	 * on it's own thread reading encoder and setting motor power to turn to the
 	 * target angle.
 	 * @param angle Desired rotational angle of motor from encoder zero point. Depending
@@ -98,12 +105,8 @@ public class TribotDrive
 	{
 		//Util.consoleLog("angle=%d", angle);
 		
-		//if (pid.getSetpoint() != angle)
-		//{
-			//pid.disable();
-			pid.setSetpoint(angle);
-			pid.enable();
-		//}
+		pid.setSetpoint(angle);
+		pid.enable();
 	}
 
 	/**
@@ -139,6 +142,40 @@ public class TribotDrive
 		pointMotor(rotatePID2, (int) angle);
 		pointMotor(rotatePID3, (int) angle);
 
+		driveMotor1.set(power);
+		driveMotor2.set(power);
+		driveMotor3.set(power);
+	}
+	
+	/**
+	 * Set drive to rotate mode. This means turn all 3 wheels to align so
+	 * that the bot rotates in place when power is applied.
+	 * @param rotate True sets wheels to rotate position, false sets wheels
+	 * to zero position (straight ahead).
+	 */
+	void setRotateMode(boolean rotate)
+	{
+		if (rotate)
+		{
+			// 1 = -86  2= 150  3 = 30
+			pointMotor(rotatePID1, -86);
+			pointMotor(rotatePID2, 150);
+			pointMotor(rotatePID3, 30);
+		} else
+		{
+			pointMotor(rotatePID1, 0);
+			pointMotor(rotatePID2, 0);
+			pointMotor(rotatePID3, 0);
+		}
+		
+	}
+	
+	/**
+	 * Set motor power when in rotate mode.
+	 * @param power Power level -1 to +1.
+	 */
+	void SetRotatePower(double power)
+	{
 		driveMotor1.set(power);
 		driveMotor2.set(power);
 		driveMotor3.set(power);
@@ -181,7 +218,7 @@ public class TribotDrive
 	/**
 	 * Stop the all motors on the drive.
 	 */
-	void stopMotor()
+	void stopMotors()
 	{
 		driveMotor1.set(0);
 		driveMotor2.set(0);

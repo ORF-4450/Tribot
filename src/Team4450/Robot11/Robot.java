@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot 
 {
-  static final String  	PROGRAM_NAME = "RAC11T-12.11.17-01";
+  static final String  	PROGRAM_NAME = "RAC11T-12.14.17-01";
 
   public Properties		robotProperties;
   
@@ -98,11 +98,11 @@ public class Robot extends SampleRobot
    		
    		Devices.InitializeCANTalonDrive();
 		
-   		Devices.robotDrive.stopMotor();
+   		Devices.robotDrive.stopMotors();
    		Devices.robotDrive.setSafetyEnabled(false);
    		Devices.robotDrive.setExpiration(0.1);
    		
-   		//Devices.robotDrive.alignToZero();
+   		Devices.robotDrive.alignToZero();
         
         // Reverse motors so they all turn on the right direction to match "forward"
         // as we define it for the robot.

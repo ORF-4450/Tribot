@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 public class Devices
 {
 	  // Motor CAN ID/PWM port assignments.
-	  private static CANTalon	canTalonDR1, canTalonST1, canTalonDR2;
-	  private static CANTalon	canTalonST2, canTalonDR3, canTalonST3;
+	  public static CANTalon	canTalonDR1, canTalonST1, canTalonDR2;
+	  public static CANTalon	canTalonST2, canTalonDR3, canTalonST3;
 	  
 	  public static TribotDrive	robotDrive;
 
@@ -36,8 +36,8 @@ public class Devices
 	  public final static AnalogInput	pressureSensor = new AnalogInput(0);
 	  
 	  public final static AbsoluteEncoder	encoder1 = new AbsoluteEncoder(new AnalogInput(1), 214);
-	  public final static AbsoluteEncoder	encoder2 = new AbsoluteEncoder(new AnalogInput(2), 233);
-	  public final static AbsoluteEncoder	encoder3 = new AbsoluteEncoder(new AnalogInput(3), 75);
+	  public final static AbsoluteEncoder	encoder2 = new AbsoluteEncoder(new AnalogInput(2), 236);
+	  public final static AbsoluteEncoder	encoder3 = new AbsoluteEncoder(new AnalogInput(3), 305);
 
 	  public final static PowerDistributionPanel	PDP = new PowerDistributionPanel();
 
