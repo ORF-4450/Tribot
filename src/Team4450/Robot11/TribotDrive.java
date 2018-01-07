@@ -11,8 +11,8 @@ public class TribotDrive
 	private final CANTalon			rotateMotor1, rotateMotor2, rotateMotor3;
 	private final AbsoluteEncoder	encoder1, encoder2, encoder3;
 	private final PIDController		rotatePID1, rotatePID2, rotatePID3;
-	//private final PIDOutputShim		rotateMotor2Shim;
-	//private final PIDSourceShim		encoder2Shim;
+	private PIDOutputShim			rotateMotor1Shim = null, rotateMotor2Shim = null;
+	private PIDSourceShim			encoder1Shim = null, encoder2Shim = null;
 
 	// Constructor.
 
@@ -34,18 +34,25 @@ public class TribotDrive
 		this.encoder2 = encoder2;
 		this.encoder3 = encoder3;
 		
-//		this.encoder1.setPidOffsetMode(true);
-//		this.encoder2.setPidOffsetMode(true);
-//		this.encoder3.setPidOffsetMode(true);
-
+		//rotateMotor1Shim = new PIDOutputShim(this.rotateMotor1);
+		//rotateMotor1Shim.disableOutput(true);
+		
+		//encoder1Shim  = new PIDSourceShim(this.encoder1);
+		
 		rotatePID1 = new PIDController(0.025, 0.001, 0.00, this.encoder1, this.rotateMotor1);
 		configureRotationPID(rotatePID1);
 		
+		//encoder1Shim.setPidController(rotatePID1);
+
 		//rotateMotor2Shim = new PIDOutputShim(this.rotateMotor2);
+		//rotateMotor2Shim.disableOutput(true);
+		
 		//encoder2Shim  = new PIDSourceShim(this.encoder2);
 		
 		rotatePID2 = new PIDController(0.025, 0.001, 0.00, this.encoder2, this.rotateMotor2);
 		configureRotationPID(rotatePID2);
+		
+		//encoder2Shim.setPidController(rotatePID2);
 		
 		rotatePID3 = new PIDController(0.025, 0.001, 0.00, this.encoder3, this.rotateMotor3);
 		configureRotationPID(rotatePID3);
@@ -85,9 +92,13 @@ public class TribotDrive
 	{
 		Util.consoleLog();
 
+		// First alignment done with encoders in absolute angle mode.
+		
 		pointMotor(rotatePID1, 0);
 		pointMotor(rotatePID2, 0);
 		pointMotor(rotatePID3, 0);
+		
+		// Driving done with encoders in offset from zero mode.
 		
 		this.encoder1.setPidOffsetMode(true);
 		this.encoder2.setPidOffsetMode(true);
@@ -157,11 +168,12 @@ public class TribotDrive
 	{
 		if (rotate)
 		{
-			// 1 = -86  2= 150  3 = 30
+			// 1 = -86  2= 150  3 = 30 (degrees from zero)
 			pointMotor(rotatePID1, -86);
 			pointMotor(rotatePID2, 150);
 			pointMotor(rotatePID3, 30);
-		} else
+		}
+		else
 		{
 			pointMotor(rotatePID1, 0);
 			pointMotor(rotatePID2, 0);
@@ -172,7 +184,7 @@ public class TribotDrive
 	
 	/**
 	 * Set motor power when in rotate mode.
-	 * @param power Power level -1 to +1.
+	 * @param power Power level -1 (left) to +1 (right).
 	 */
 	void SetRotatePower(double power)
 	{

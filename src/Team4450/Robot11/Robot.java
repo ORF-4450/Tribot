@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot 
 {
-  static final String  	PROGRAM_NAME = "RAC11T-12.14.17-01";
+  static final String  	PROGRAM_NAME = "RAC11T-01.05.18-01";
 
   public Properties		robotProperties;
   
@@ -101,6 +101,8 @@ public class Robot extends SampleRobot
    		Devices.robotDrive.stopMotors();
    		Devices.robotDrive.setSafetyEnabled(false);
    		Devices.robotDrive.setExpiration(0.1);
+   		
+   		// Get all 3 wheels pointing straight ahead to start.
    		
    		Devices.robotDrive.alignToZero();
         

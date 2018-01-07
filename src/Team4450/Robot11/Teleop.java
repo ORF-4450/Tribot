@@ -70,7 +70,7 @@ class Teleop
 
 		leftStick = new JoyStick(Devices.leftStick, "LeftStick", JoyStickButtonIDs.TRIGGER, this);
 		//Example on how to track button:
-		//leftStick.AddButton(JoyStickButtonIDs.BUTTON_NAME_HERE);
+		leftStick.AddButton(JoyStickButtonIDs.TOP_BACK);
 		leftStick.addJoyStickEventListener(new LeftStickListener());
 		leftStick.Start();
 
@@ -102,7 +102,7 @@ class Teleop
 		//Devices.encoder.reset();
 
 		// Motor safety turned on.
-		Devices.robotDrive.setSafetyEnabled(false);
+		Devices.robotDrive.setSafetyEnabled(true);
 
 		// Driving loop runs until teleop is over.
 
@@ -128,7 +128,9 @@ class Teleop
 			// Set wheel motors.
 			// Do not feed JS input to robotDrive if we are controlling the motors in automatic functions.
 
-			if (!autoTarget && !setEncoderZero && !rotateMode) Devices.robotDrive.allSteer(rightY * .50, leftX);
+			if (!autoTarget && !setEncoderZero && !rotateMode && !altDriveMode) Devices.robotDrive.allSteer(rightY * .50, leftX);
+			
+			if (!autoTarget && !setEncoderZero && !rotateMode && altDriveMode) Devices.robotDrive.singleSteer(rightY * .50, leftX);
 
 			if (!autoTarget && !setEncoderZero && rotateMode) Devices.robotDrive.SetRotatePower(leftX);
 
@@ -213,6 +215,7 @@ class Teleop
 			case ROCKER_LEFT_FRONT:
 				if (control.latchedState)
 				{
+					Devices.robotDrive.setSafetyEnabled(false);
 					setEncoderZero = true;
 					Devices.robotDrive.stopMotors();
 				}
@@ -223,6 +226,7 @@ class Teleop
 					Devices.encoder3.setZeroAngleOffset(Devices.encoder3.getRawAngle());
 
 					setEncoderZero = false;
+					Devices.robotDrive.setSafetyEnabled(true);
 				}
 				
 				break;
