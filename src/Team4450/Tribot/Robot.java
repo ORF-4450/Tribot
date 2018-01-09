@@ -104,6 +104,8 @@ public class Robot extends SampleRobot
    		
    		Devices.robotDrive.alignToZero();
         
+   		//Devices.robotDrive.setInvertedMotor(2, true);
+   		
         // Reverse motors so they all turn on the right direction to match "forward"
         // as we define it for the robot.
 

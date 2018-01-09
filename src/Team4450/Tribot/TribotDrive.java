@@ -245,7 +245,7 @@ public class TribotDrive
 	}
 	
 	/**
-	 * Invert motor control signals.
+	 * Invert drive motor control signals.
 	 * @param motor Motor to set inversion status.
 	 * 1 = motor 1, 2 = motor 2, 3 = motor 3.
 	 * @param isInverted True to invert motor control.

@@ -51,11 +51,11 @@ public class Devices
 	  {
 		  Util.consoleLog();
 
-		  canTalonDR1 = new CANTalon(1);
-		  canTalonST1 = new CANTalon(2);
-		  canTalonDR2 = new CANTalon(3);
+		  canTalonDR1 = new CANTalon(1);	// front drive motor
+		  canTalonST1 = new CANTalon(2);	
+		  canTalonDR2 = new CANTalon(3);	// left drive motor looking from front
 		  canTalonST2 = new CANTalon(4);
-		  canTalonDR3 = new CANTalon(5);
+		  canTalonDR3 = new CANTalon(5);	// right drive motor looking from front
 		  canTalonST3 = new CANTalon(6);
 
 		  robotDrive = new TribotDrive( canTalonDR1, canTalonDR2, canTalonDR3,
