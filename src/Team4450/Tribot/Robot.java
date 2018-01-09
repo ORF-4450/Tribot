@@ -1,7 +1,5 @@
 /**
- * 2018 competition robot code.
- *
- * For Robot "TBA" built for FRC game "FIRST POWER UP".
+ * For Robot "Tribot" built for off season learning.
  * 
  * This version has all physical devices defined in a new static class
  * called Devices. This puts all the devices and their port assignments
@@ -9,7 +7,7 @@
  * continue to exist until the code is stopped.
 */
 
-package Team4450.Robot11;
+package Team4450.Tribot;
 
 import java.util.Properties;
 
@@ -29,7 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot 
 {
-  static final String  	PROGRAM_NAME = "RAC11T-01.05.18-01";
+  static final String  	PROGRAM_NAME = "TRIBOT-01.09.18-01";
 
   public Properties		robotProperties;
   

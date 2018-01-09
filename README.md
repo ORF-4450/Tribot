@@ -1,8 +1,5 @@
-# Robot11
-FRC Team 4450 2018 Robot Control program.
-
-This is the 2018 competition robot control program created by the Olympia Robotics Federation (FRC Team 4450).
-Operates the robot "TBA" for FRC game "FIRST POWER UP".
+# Tribot
+FRC Team 4450 Tribot Control program.
 
 ## Instructions to setup development environment
 1) Follow the instructions [here](http://wpilib.screenstepslive.com/s/4485/m/13809/l/599681-installing-eclipse-c-java) to setup the JDK, Eclipse, and the FRC plugins.
@@ -17,16 +14,16 @@ Operates the robot "TBA" for FRC game "FIRST POWER UP".
 3) Right click on the project in Eclipse and select "Refresh"
 
 ****************************************************************************************************************
-Version 11.0T
+Version 1.1
 
-*	Branch for Tribot project.
+*	Final version before 2018 build season. Works but needs further development of driving design (joysticks).
+
+R Corn
+January 2018.
+
+Version 1.0
+
+*	Created new code base for 3 wheeled Tribot project. Based on Robot11 before conversion to 2018 spec.
 
 R. Corn
 November 2017.
-
-Version 11.0
-
-*	Cloned from Robot10. 2017 specific code removed, cleaned up in preparation for 2018 season.
-
-S. Flo
-October 1, 2017
