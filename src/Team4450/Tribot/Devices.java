@@ -1,7 +1,7 @@
 package Team4450.Tribot;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.*;
 
 import Team4450.Lib.*;
 
@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 public class Devices
 {
 	  // Motor CAN ID/PWM port assignments.
-	  public static CANTalon	canTalonDR1, canTalonST1, canTalonDR2;
-	  public static CANTalon	canTalonST2, canTalonDR3, canTalonST3;
+	  public static WPI_TalonSRX	canTalonDR1, canTalonST1, canTalonDR2;
+	  public static WPI_TalonSRX	canTalonST2, canTalonDR3, canTalonST3;
 	  
 	  public static TribotDrive	robotDrive;
 
@@ -51,12 +51,12 @@ public class Devices
 	  {
 		  Util.consoleLog();
 
-		  canTalonDR1 = new CANTalon(1);	// front drive motor
-		  canTalonST1 = new CANTalon(2);	
-		  canTalonDR2 = new CANTalon(3);	// left drive motor looking from front
-		  canTalonST2 = new CANTalon(4);
-		  canTalonDR3 = new CANTalon(5);	// right drive motor looking from front
-		  canTalonST3 = new CANTalon(6);
+		  canTalonDR1 = new WPI_TalonSRX(1);	// front drive motor
+		  canTalonST1 = new WPI_TalonSRX(2);	
+		  canTalonDR2 = new WPI_TalonSRX(3);	// left drive motor looking from front
+		  canTalonST2 = new WPI_TalonSRX(4);
+		  canTalonDR3 = new WPI_TalonSRX(5);	// right drive motor looking from front
+		  canTalonST3 = new WPI_TalonSRX(6);
 
 		  robotDrive = new TribotDrive( canTalonDR1, canTalonDR2, canTalonDR3,
 				  						canTalonST1, canTalonST2, canTalonST3,
@@ -83,38 +83,51 @@ public class Devices
 	  // Initialize and Log status indication from CANTalon. If we see an exception
 	  // or a talon has low voltage value, it did not get recognized by the RR on start up.
 	  
-	  public static void InitializeCANTalon(CANTalon talon)
+	  public static void InitializeCANTalon(WPI_TalonSRX talon)
 	  {
 		  Util.consoleLog("talon init: %s   voltage=%.1f", talon.getDescription(), talon.getBusVoltage());
 
-		  talon.clearStickyFaults();
-		  talon.enableControl();
-		  talon.changeControlMode(TalonControlMode.PercentVbus);
+		  talon.clearStickyFaults(0);	//0ms means no blocking.
+		  //talon.enableControl();
+		  //talon.changeControlMode(TalonControlMode.PercentVbus);	//TODO Find PercentVbus
 	  }
 	  
 	  // Set neutral behavior of CAN Talons. True = brake mode, false = coast mode.
 
-	  public static void SetCANTalonBrakeMode(CANTalon talon, boolean brakeMode)
+	  public static void SetCANTalonBrakeMode(WPI_TalonSRX talon, boolean brakeMode)
 	  {
+		  NeutralMode newMode;
+
 		  Util.consoleLog("talon: %s  brakes on=%b", talon.getDescription(), brakeMode);
 		  
-		  talon.enableBrakeMode(brakeMode);
+		  if (brakeMode) 
+			  newMode = NeutralMode.Brake;
+		  else
+			  newMode = NeutralMode.Coast;
+		  
+		  canTalonDR1.setNeutralMode(newMode);
+		  canTalonST1.setNeutralMode(newMode);
+		  canTalonDR2.setNeutralMode(newMode);
+		  canTalonST2.setNeutralMode(newMode);
+		  canTalonDR3.setNeutralMode(newMode);
+		  canTalonST3.setNeutralMode(newMode);
 	  }
 	  
 	  // Set CAN Talon voltage ramp rate. Rate is volts/sec and can be 2-12v.
+	  // No replacement in 2018 WpiLib.
 	  
-	  public static void SetCANTalonRampRate(CANTalon talon, double rate)
-	  {
-		  Util.consoleLog("talon: %s  rate=%f", talon.getDescription(), rate);
-		  
-		  talon.setVoltageRampRate(rate);
-	  }
+//	  public static void SetCANTalonRampRate(WPI_TalonSRX talon, double rate)
+//	  {
+//		  Util.consoleLog("talon: %s  rate=%f", talon.getDescription(), rate);
+//		  
+//		  talon.setVoltageRampRate(rate);
+//	  }
 	  
 	  // Return voltage and current draw for CAN Talon.
 	  
-	  public static String GetCANTalonStatus(CANTalon talon)
+	  public static String GetCANTalonStatus(WPI_TalonSRX talon)
 	  {
 		  return String.format("talon: %s  v=%.1f/%.1f  c=%.1f/%.1f", 
-				  talon.getOutputVoltage(), talon.getOutputCurrent());
+				  talon.getMotorOutputVoltage(), talon.getOutputCurrent());
 	  }
 }

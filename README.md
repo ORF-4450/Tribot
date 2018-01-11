@@ -14,6 +14,13 @@ FRC Team 4450 Tribot Control program.
 3) Right click on the project in Eclipse and select "Refresh"
 
 ****************************************************************************************************************
+Version 1.2
+
+*	Updated for compatibility with 2018 WpiLib.
+
+R Corn
+January 2018.
+
 Version 1.1
 
 *	Final version before 2018 build season. Works but needs further development of driving design (joysticks).

@@ -14,7 +14,6 @@ import java.util.Properties;
 import Team4450.Lib.*;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -25,9 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.properties file.
  */
 
+@SuppressWarnings("deprecation")
 public class Robot extends SampleRobot 
 {
-  static final String  	PROGRAM_NAME = "TRIBOT-01.09.18-01";
+  static final String  	PROGRAM_NAME = "TRIBOT-01.10.18-01";
 
   public Properties		robotProperties;
   
@@ -104,8 +104,6 @@ public class Robot extends SampleRobot
    		
    		Devices.robotDrive.alignToZero();
         
-   		//Devices.robotDrive.setInvertedMotor(2, true);
-   		
         // Reverse motors so they all turn on the right direction to match "forward"
         // as we define it for the robot.
 
@@ -124,7 +122,7 @@ public class Robot extends SampleRobot
 
    		// Start the battery, compressor, PDP and camera feed monitoring Tasks.
 
-   		monitorBatteryThread = MonitorBattery.getInstance(Devices.ds);
+   		monitorBatteryThread = MonitorBattery.getInstance();
    		monitorBatteryThread.start();
 
 //   		monitorCompressorThread = MonitorCompressor.getInstance(Devices.pressureSensor);

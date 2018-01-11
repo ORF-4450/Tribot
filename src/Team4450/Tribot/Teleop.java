@@ -7,7 +7,6 @@ import Team4450.Lib.*;
 import Team4450.Lib.JoyStick.*;
 import Team4450.Lib.LaunchPad.*;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 class Teleop
 {
@@ -15,8 +14,6 @@ class Teleop
 	public  JoyStick			rightStick, leftStick, utilityStick;
 	public  LaunchPad			launchPad;
 	private boolean				autoTarget, altDriveMode, setEncoderZero, rotateMode;
-;
-	private Vision				vision;
 
 	// Constructor.
 
@@ -25,8 +22,6 @@ class Teleop
 		Util.consoleLog();
 
 		this.robot = robot;
-
-		vision = Vision.getInstance(robot);
 	}
 
 	// Free all objects that need it.

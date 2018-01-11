@@ -1,14 +1,15 @@
 package Team4450.Tribot;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.can.*;
 
 import Team4450.Lib.*;
+
 import edu.wpi.first.wpilibj.PIDController;
 
 public class TribotDrive
 {
-	private final CANTalon			driveMotor1, driveMotor2, driveMotor3;
-	private final CANTalon			rotateMotor1, rotateMotor2, rotateMotor3;
+	private final WPI_TalonSRX		driveMotor1, driveMotor2, driveMotor3;
+	private final WPI_TalonSRX		rotateMotor1, rotateMotor2, rotateMotor3;
 	private final AbsoluteEncoder	encoder1, encoder2, encoder3;
 	private final PIDController		rotatePID1, rotatePID2, rotatePID3;
 	private PIDOutputShim			rotateMotor1Shim = null, rotateMotor2Shim = null;
@@ -16,8 +17,8 @@ public class TribotDrive
 
 	// Constructor.
 
-	TribotDrive(CANTalon driveMotor1, CANTalon driveMotor2, CANTalon driveMotor3,
-				CANTalon rotateMotor1, CANTalon rotateMotor2, CANTalon rotateMotor3,
+	TribotDrive(WPI_TalonSRX driveMotor1, WPI_TalonSRX driveMotor2, WPI_TalonSRX driveMotor3,
+				WPI_TalonSRX rotateMotor1, WPI_TalonSRX rotateMotor2, WPI_TalonSRX rotateMotor3,
 				AbsoluteEncoder encoder1, AbsoluteEncoder encoder2, AbsoluteEncoder encoder3)
 	{
 		Util.consoleLog();
