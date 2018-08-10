@@ -36,7 +36,7 @@ class Teleop
 		if (launchPad != null) launchPad.dispose();
 	}
 
-	void OperatorControl()
+	void OperatorControl() throws Exception
 	{
 		double	rightY = 0, rightX = 0, leftY = 0, leftX = 0, utilX = 0;
 		
@@ -82,8 +82,8 @@ class Teleop
 		utilityStick.Start();
 
 		// Remove dead zone for smoother steering movement.
-		rightStick.deadZone = 0.03;
-		leftStick.deadZone = 0.03;
+		rightStick.deadZone(.03);
+		leftStick.deadZone(.03);
 
 		// Set CAN Talon brake mode by rocker switch setting.
 		// We do this here so that the Utility stick thread has time to read the initial state
@@ -108,10 +108,11 @@ class Teleop
 
 			rightY = stickLogCorrection(rightStick.GetY());	// fwd/back
 			leftX = leftStick.GetX();						// left/right
+			rightX = rightStick.GetX();						// left/right
 
 			utilX = utilityStick.GetX();
 
-			LCD.printLine(4, "leftX=%.4f  rightY=%.4f  utilX=%.4f", leftX, rightY, utilX);
+			LCD.printLine(4, "leftX=%.3f  rightX=%.3f  rightY=%.3f  utilX=%.3f", leftX, rightX, rightY, utilX);
 			//LCD.printLine(6, "yaw=%.2f, total=%.2f, rate=%.2f, hdng=%.2f", Devices.navx.getYaw(), Devices.navx.getTotalYaw(), 
 			//		Devices.navx.getYawRate(), Devices.navx.getHeading());
 			LCD.printLine(5, "Set encoder zero=%b", setEncoderZero);
@@ -201,7 +202,7 @@ class Teleop
 		{
 			LaunchPadControl	control = launchPadEvent.control;
 
-			Util.consoleLog("%s", control.id.name());
+			Util.consoleLog("%s, latchedState=%b", control.id.name(), control.latchedState);
 
 			switch(control.id)
 			{

@@ -23,6 +23,9 @@ public class Devices
 	  // Motor CAN ID/PWM port assignments.
 	  public static WPI_TalonSRX	canTalonDR1, canTalonST1, canTalonDR2;
 	  public static WPI_TalonSRX	canTalonST2, canTalonDR3, canTalonST3;
+
+	  public final static Talon		talonST1 = new Talon(0);			// PWM port 0.
+	  public final static Talon		talonDR1 = new Talon(1);			// PWM port 1.
 	  
 	  public static TribotDrive	robotDrive;
 
@@ -51,29 +54,29 @@ public class Devices
 	  {
 		  Util.consoleLog();
 
-		  canTalonDR1 = new WPI_TalonSRX(1);	// front drive motor
-		  canTalonST1 = new WPI_TalonSRX(2);	
+		  //canTalonDR1 = new WPI_TalonSRX(1);	// front drive motor
+		  //canTalonST1 = new WPI_TalonSRX(2);	
 		  canTalonDR2 = new WPI_TalonSRX(3);	// left drive motor looking from front
 		  canTalonST2 = new WPI_TalonSRX(4);
 		  canTalonDR3 = new WPI_TalonSRX(5);	// right drive motor looking from front
 		  canTalonST3 = new WPI_TalonSRX(6);
 
-		  robotDrive = new TribotDrive( canTalonDR1, canTalonDR2, canTalonDR3,
-				  						canTalonST1, canTalonST2, canTalonST3,
+		  robotDrive = new TribotDrive( talonDR1, canTalonDR2, canTalonDR3,
+				  						talonST1, canTalonST2, canTalonST3,
 				  						encoder1, encoder2, encoder3);
 
 	      // Initialize CAN Talons and write status to log so we can verify
 	      // all the talons are connected.
-	      InitializeCANTalon(canTalonDR1);
-	      InitializeCANTalon(canTalonST1);
+	      //InitializeCANTalon(canTalonDR1);
+	      //InitializeCANTalon(canTalonST1);
 	      InitializeCANTalon(canTalonDR2);
 	      InitializeCANTalon(canTalonST2);
 	      InitializeCANTalon(canTalonDR3);
 	      InitializeCANTalon(canTalonST3);
       
 	      // Turn on brake mode for CAN Talons.
-	      SetCANTalonBrakeMode(canTalonDR1, true);
-	      SetCANTalonBrakeMode(canTalonST1, true);
+	      //SetCANTalonBrakeMode(canTalonDR1, true);
+	      //SetCANTalonBrakeMode(canTalonST1, true);
 	      SetCANTalonBrakeMode(canTalonDR2, true);
 	      SetCANTalonBrakeMode(canTalonST2, true);
 	      SetCANTalonBrakeMode(canTalonDR3, true);
@@ -105,8 +108,8 @@ public class Devices
 		  else
 			  newMode = NeutralMode.Coast;
 		  
-		  canTalonDR1.setNeutralMode(newMode);
-		  canTalonST1.setNeutralMode(newMode);
+		  //canTalonDR1.setNeutralMode(newMode);
+		  //canTalonST1.setNeutralMode(newMode);
 		  canTalonDR2.setNeutralMode(newMode);
 		  canTalonST2.setNeutralMode(newMode);
 		  canTalonDR3.setNeutralMode(newMode);

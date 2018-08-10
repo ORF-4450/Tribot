@@ -5,11 +5,15 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import Team4450.Lib.*;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Talon;
 
 public class TribotDrive
 {
-	private final WPI_TalonSRX		driveMotor1, driveMotor2, driveMotor3;
-	private final WPI_TalonSRX		rotateMotor1, rotateMotor2, rotateMotor3;
+//	private final WPI_TalonSRX		driveMotor1, driveMotor2, driveMotor3;
+//	private final WPI_TalonSRX		rotateMotor1, rotateMotor2, rotateMotor3;
+	private final WPI_TalonSRX		driveMotor2, driveMotor3;
+	private final WPI_TalonSRX		rotateMotor2, rotateMotor3;
+	private final Talon				driveMotor1, rotateMotor1;
 	private final AbsoluteEncoder	encoder1, encoder2, encoder3;
 	private final PIDController		rotatePID1, rotatePID2, rotatePID3;
 	private PIDOutputShim			rotateMotor1Shim = null, rotateMotor2Shim = null;
@@ -17,9 +21,12 @@ public class TribotDrive
 
 	// Constructor.
 
-	TribotDrive(WPI_TalonSRX driveMotor1, WPI_TalonSRX driveMotor2, WPI_TalonSRX driveMotor3,
-				WPI_TalonSRX rotateMotor1, WPI_TalonSRX rotateMotor2, WPI_TalonSRX rotateMotor3,
-				AbsoluteEncoder encoder1, AbsoluteEncoder encoder2, AbsoluteEncoder encoder3)
+//	TribotDrive(WPI_TalonSRX driveMotor1, WPI_TalonSRX driveMotor2, WPI_TalonSRX driveMotor3,
+//				WPI_TalonSRX rotateMotor1, WPI_TalonSRX rotateMotor2, WPI_TalonSRX rotateMotor3,
+//				AbsoluteEncoder encoder1, AbsoluteEncoder encoder2, AbsoluteEncoder encoder3)
+	TribotDrive(Talon driveMotor1, WPI_TalonSRX driveMotor2, WPI_TalonSRX driveMotor3,
+			Talon rotateMotor1, WPI_TalonSRX rotateMotor2, WPI_TalonSRX rotateMotor3,
+			AbsoluteEncoder encoder1, AbsoluteEncoder encoder2, AbsoluteEncoder encoder3)
 	{
 		Util.consoleLog();
 
