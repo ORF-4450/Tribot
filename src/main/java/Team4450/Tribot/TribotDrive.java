@@ -5,7 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import Team4450.Lib.*;
 
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 public class TribotDrive
 {
@@ -24,6 +26,7 @@ public class TribotDrive
 //	TribotDrive(WPI_TalonSRX driveMotor1, WPI_TalonSRX driveMotor2, WPI_TalonSRX driveMotor3,
 //				WPI_TalonSRX rotateMotor1, WPI_TalonSRX rotateMotor2, WPI_TalonSRX rotateMotor3,
 //				AbsoluteEncoder encoder1, AbsoluteEncoder encoder2, AbsoluteEncoder encoder3)
+	
 	TribotDrive(Talon driveMotor1, WPI_TalonSRX driveMotor2, WPI_TalonSRX driveMotor3,
 			Talon rotateMotor1, WPI_TalonSRX rotateMotor2, WPI_TalonSRX rotateMotor3,
 			AbsoluteEncoder encoder1, AbsoluteEncoder encoder2, AbsoluteEncoder encoder3)
@@ -47,7 +50,7 @@ public class TribotDrive
 		
 		//encoder1Shim  = new PIDSourceShim(this.encoder1);
 		
-		rotatePID1 = new PIDController(0.025, 0.001, 0.00, this.encoder1, this.rotateMotor1);
+		rotatePID1 = new PIDController(0.025, 0.001, 0.00, (PIDSource) this.encoder1, (PIDOutput) this.rotateMotor1);
 		configureRotationPID(rotatePID1);
 		
 		//encoder1Shim.setPidController(rotatePID1);
@@ -57,12 +60,12 @@ public class TribotDrive
 		
 		//encoder2Shim  = new PIDSourceShim(this.encoder2);
 		
-		rotatePID2 = new PIDController(0.025, 0.001, 0.00, this.encoder2, this.rotateMotor2);
+		rotatePID2 = new PIDController(0.025, 0.001, 0.00, (PIDSource) this.encoder2, (PIDOutput) this.rotateMotor2);
 		configureRotationPID(rotatePID2);
 		
 		//encoder2Shim.setPidController(rotatePID2);
 		
-		rotatePID3 = new PIDController(0.025, 0.001, 0.00, this.encoder3, this.rotateMotor3);
+		rotatePID3 = new PIDController(0.025, 0.001, 0.00, (PIDSource) this.encoder3, (PIDOutput) this.rotateMotor3);
 		configureRotationPID(rotatePID3);
 	}
 
@@ -74,11 +77,11 @@ public class TribotDrive
 		Util.consoleLog();
 
 		rotatePID1.disable();
-		rotatePID1.free();
+		//rotatePID1.free();
 		rotatePID2.disable();
-		rotatePID2.free();
+		//rotatePID2.free();
 		rotatePID3.disable();
-		rotatePID3.free();
+		//rotatePID3.free();
 	}
 	
 	/**

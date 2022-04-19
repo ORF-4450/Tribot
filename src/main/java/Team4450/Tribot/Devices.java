@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
@@ -27,7 +26,7 @@ public class Devices
 	  public final static Talon		talonST1 = new Talon(0);			// PWM port 0.
 	  public final static Talon		talonDR1 = new Talon(1);			// PWM port 1.
 	  
-	  public static TribotDrive	robotDrive;
+	  public static TribotDrive		robotDrive;
 
 	  public final static Joystick      utilityStick = new Joystick(2);	
 	  public final static Joystick      leftStick = new Joystick(0);	
@@ -42,9 +41,9 @@ public class Devices
 	  public final static AbsoluteEncoder	encoder2 = new AbsoluteEncoder(new AnalogInput(2), 236);
 	  public final static AbsoluteEncoder	encoder3 = new AbsoluteEncoder(new AnalogInput(3), 305);
 
-	  public final static PowerDistributionPanel	PDP = new PowerDistributionPanel();
+	  public final static PowerDistribution	PDP = new PowerDistribution();
 
-	  public final static DriverStation				ds = DriverStation.getInstance();
+	  public final static DriverStation		ds = DriverStation.getInstance();
 
 	  public static NavX				navx;
 

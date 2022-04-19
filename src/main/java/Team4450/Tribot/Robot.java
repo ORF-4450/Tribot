@@ -12,9 +12,8 @@ package Team4450.Tribot;
 import java.util.Properties;
 
 import Team4450.Lib.*;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -25,9 +24,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 
 @SuppressWarnings("deprecation")
-public class Robot extends SampleRobot 
+public class Robot extends TimedRobot 
 {
-  static final String  	PROGRAM_NAME = "TRIBOT-07.23.18-01";
+  static final String  	PROGRAM_NAME = "TRIBOT-04.04.22-01";
 
   public Properties		robotProperties;
   
@@ -145,7 +144,7 @@ public class Robot extends SampleRobot
   
   // Called when robot is disabled.
   
-  public void disabled()
+  public void disabledInit()
   {
 	  try
 	  {
@@ -171,7 +170,7 @@ public class Robot extends SampleRobot
   
   // Called at the start of Autonomous period.
   
-  public void autonomous() 
+  public void autonomousInit() 
   {
       try
       {
@@ -212,7 +211,7 @@ public class Robot extends SampleRobot
 
   // Called at the start of the teleop period.
   
-  public void operatorControl() 
+  public void teleopInit() 
   {
       try
       {
@@ -247,18 +246,5 @@ public class Robot extends SampleRobot
           Util.consoleLog("end");
        }
        catch (Exception e) {Util.logException(e);} 
-  }
-    
-  public void test() 
-  {
-  }
-
-  // Start usb camera server for single camera.
-  
-  public void StartUSBCameraServer(String cameraName, int device)
-  {
-	  Util.consoleLog("%s:%d", cameraName, device);
-
-      CameraServer.getInstance().startAutomaticCapture(cameraName, device);
   }
 }

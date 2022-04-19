@@ -50,7 +50,7 @@ class Teleop
 
 		// Configure LaunchPad and Joystick event handlers.
 
-		launchPad = new LaunchPad(Devices.launchPad, LaunchPadControlIDs.BUTTON_BLUE, this);
+		launchPad = new LaunchPad(Devices.launchPad, LaunchPadControlIDs.BUTTON_BLUE);
 
 		LaunchPadControl lpControl = launchPad.AddControl(LaunchPadControlIDs.ROCKER_LEFT_BACK);
 		lpControl.controlType = LaunchPadControlTypes.SWITCH;
@@ -63,19 +63,19 @@ class Teleop
 		launchPad.addLaunchPadEventListener(new LaunchPadListener());
 		launchPad.Start();
 
-		leftStick = new JoyStick(Devices.leftStick, "LeftStick", JoyStickButtonIDs.TRIGGER, this);
+		leftStick = new JoyStick(Devices.leftStick, "LeftStick", JoyStickButtonIDs.TRIGGER);
 		//Example on how to track button:
 		leftStick.AddButton(JoyStickButtonIDs.TOP_BACK);
 		leftStick.addJoyStickEventListener(new LeftStickListener());
 		leftStick.Start();
 
-		rightStick = new JoyStick(Devices.rightStick, "RightStick", JoyStickButtonIDs.TRIGGER, this);
+		rightStick = new JoyStick(Devices.rightStick, "RightStick", JoyStickButtonIDs.TRIGGER);
 		//Example on how to track button:
 		//rightStick.AddButton(JoyStickButtonIDs.BUTTON_NAME_HERE);
 		rightStick.addJoyStickEventListener(new RightStickListener());
 		rightStick.Start();
 
-		utilityStick = new JoyStick(Devices.utilityStick, "UtilityStick", JoyStickButtonIDs.TRIGGER, this);
+		utilityStick = new JoyStick(Devices.utilityStick, "UtilityStick", JoyStickButtonIDs.TRIGGER);
 		//Example on how to track button:
 		//utilityStick.AddButton(JoyStickButtonIDs.BUTTON_NAME_HERE);
 		utilityStick.addJoyStickEventListener(new UtilityStickListener());
